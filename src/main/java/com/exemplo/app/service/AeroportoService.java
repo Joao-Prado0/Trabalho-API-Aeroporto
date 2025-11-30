@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
+import java.util.Optional;
 
 @Service
 @AllArgsConstructor
@@ -32,6 +33,15 @@ public class AeroportoService {
         return new AllAeroportoDTO(allAeroportoDTOS);
     }
 
+    @Transactional
+    public AeroportoResponseDTO buscarAeroportoPorID(Integer id){
+        Optional<Aeroporto> aeroporto = aeroportoRepository.findById(id);
+
+        if (aeroporto.isEmpty())
+            throw new RuntimeException("Nenhum aeroporto encotrado com id: " + id);
+
+        return settarResponseDTO(aeroporto.get());
+    }
 
     private AeroportoResponseDTO settarResponseDTO(Aeroporto aeroporto){
         return new AeroportoResponseDTO(
