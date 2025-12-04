@@ -45,7 +45,7 @@ public class AeroportoService {
     }
 
     @Transactional
-    public void registrarNovoAeroporto(AeroportoRequestDTO dto){
+    public AeroportoResponseDTO registrarNovoAeroporto(AeroportoRequestDTO dto){
 
         Optional<Aeroporto> aeroporto = aeroportoRepository.findByCodigoIATA(dto.codigoIATA());
 
@@ -55,10 +55,12 @@ public class AeroportoService {
         Aeroporto novoAeroporto = settarAtributosAeroporto(aeroporto.get(), dto);
 
         aeroportoRepository.save(novoAeroporto);
+
+        return settarResponseDTO(novoAeroporto);
     }
 
     @Transactional
-    public void alterarDadosAeroporto(String iata, AeroportoRequestDTO dto){
+    public AeroportoResponseDTO alterarDadosAeroporto(String iata, AeroportoRequestDTO dto){
 
         if (!iata.equals(dto.codigoIATA()))
             throw new RuntimeException("IATA da url não corresponde ao IATA da requisição");
@@ -69,7 +71,9 @@ public class AeroportoService {
 
         Aeroporto aeroportoBD = settarAtributosAeroporto(aeroportoOPT.get(), dto);
 
+        aeroportoRepository.save(aeroportoBD);
 
+        return settarResponseDTO(aeroportoBD);
     }
 
     @Transactional

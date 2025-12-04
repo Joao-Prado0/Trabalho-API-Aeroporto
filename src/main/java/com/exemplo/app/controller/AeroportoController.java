@@ -47,8 +47,8 @@ public class AeroportoController {
     @PostMapping("/register")
     public ResponseEntity<?> registrarNovoAeroporto(@RequestBody AeroportoRequestDTO dto){
         try {
-            aeroportoService.registrarNovoAeroporto(dto);
-            return ResponseEntity.ok("Aeroporto criado com sucesso!");
+            AeroportoResponseDTO responseDTO = aeroportoService.registrarNovoAeroporto(dto);
+            return ResponseEntity.ok(responseDTO);
         } catch (RuntimeException e){
             return ResponseEntity.badRequest().body(e.getMessage());
         }
@@ -57,8 +57,8 @@ public class AeroportoController {
     @PutMapping("{iata}")
     public ResponseEntity<?> alterarDadosDeAeroporto(@PathVariable String iata, @RequestBody AeroportoRequestDTO dto){
         try {
-            aeroportoService.alterarDadosAeroporto(iata,dto);
-            return ResponseEntity.ok("Aeroporto alterado com sucesso");
+            AeroportoResponseDTO responseDTO = aeroportoService.alterarDadosAeroporto(iata,dto);
+            return ResponseEntity.ok(responseDTO);
         } catch (RuntimeException e){
             return ResponseEntity.badRequest().body(e.getMessage());
         }
