@@ -3,6 +3,7 @@ package com.exemplo.app.service;
 import com.exemplo.app.dto.AeroportoRequestDTO;
 import com.exemplo.app.dto.AeroportoResponseDTO;
 import com.exemplo.app.dto.AllAeroportoDTO;
+import com.exemplo.app.exceptions.AeroportoNaoEncontradoException;
 import com.exemplo.app.model.Aeroporto;
 import com.exemplo.app.repository.AeroportoRepository;
 import lombok.AllArgsConstructor;
@@ -23,7 +24,7 @@ public class AeroportoService {
         ArrayList<Aeroporto> todosAeroportos = (ArrayList<Aeroporto>) aeroportoRepository.findAll();
 
         if (todosAeroportos.isEmpty())
-            throw new RuntimeException("Nenhum Aeroporto Encontrado");
+            throw new AeroportoNaoEncontradoException("Nenhum Aeroporto Encontrado");
 
         ArrayList<AeroportoResponseDTO> allAeroportoDTOS = new ArrayList<>();
         for (Aeroporto aeroporto : todosAeroportos){
@@ -50,7 +51,7 @@ public class AeroportoService {
         Optional<Aeroporto> aeroporto = aeroportoRepository.findByCodigoIATA(dto.codigoIATA());
 
         if (aeroporto.isPresent())
-            throw new RuntimeException("Aeroporto já existe no banco de dados com IATA: " + dto.codigoIATA());
+            throw new AeroportoNaoEncontradoException("Aeroporto já existe no banco de dados com IATA: " + dto.codigoIATA());
 
         Aeroporto novoAeroporto = settarAtributosAeroporto(new Aeroporto(), dto);
 
@@ -67,7 +68,7 @@ public class AeroportoService {
 
         Optional<Aeroporto> aeroportoOPT = aeroportoRepository.findByCodigoIATA(iata);
         if (aeroportoOPT.isEmpty())
-            throw new RuntimeException("Aeroporto não encontrado no BD com código IATA: " + iata);
+            throw new AeroportoNaoEncontradoException("Aeroporto não encontrado no BD com código IATA: " + iata);
 
         Aeroporto aeroportoBD = settarAtributosAeroporto(aeroportoOPT.get(), dto);
 
@@ -81,7 +82,7 @@ public class AeroportoService {
         Optional<Aeroporto> aeroporto = aeroportoRepository.findByCodigoIATA(iata);
 
         if (aeroporto.isEmpty())
-            throw new RuntimeException("Aeroporto não encontrado no BD com código IATA: " + iata);
+            throw new AeroportoNaoEncontradoException("Aeroporto não encontrado no BD com código IATA: " + iata);
 
         aeroportoRepository.delete(aeroporto.get());
     }
@@ -90,11 +91,19 @@ public class AeroportoService {
 
     private Aeroporto settarAtributosAeroporto(Aeroporto aeroporto, AeroportoRequestDTO dto){
         aeroporto.setNomeAeroporto(dto.nomeAeroporto());
-        aeroporto.setCodigoIATA(dto.codigoIATA());
         aeroporto.setCidade(dto.cidade());
-        aeroporto.setCodigoISO(dto.codigoISO());
         aeroporto.setLatitude(dto.latitude());
         aeroporto.setLongitude(dto.longitude());
+
+        if (dto.codigoIATA().length() > 3)
+            throw new IllegalArgumentException("Código IATA inválido");
+        aeroporto.setCodigoIATA(dto.codigoIATA());
+
+        if(dto.codigoISO().length() > 2)
+            throw new IllegalArgumentException("Código ISO inválido");
+        aeroporto.setCodigoISO(dto.codigoISO());
+
+        if (dto.altitude().)
         aeroporto.setAltitude(dto.altitude());
 
         return aeroporto;
