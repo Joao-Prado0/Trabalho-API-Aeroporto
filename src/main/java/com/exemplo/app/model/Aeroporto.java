@@ -29,7 +29,7 @@ public class Aeroporto {
     Integer idAeroporto;
 
     @NotNull
-    @Size(max = 80)
+    @Size(max = 150)
     @Column(name = "nome_aeroporto", length = 80)
     String nomeAeroporto;
 
@@ -38,7 +38,7 @@ public class Aeroporto {
     @NotNull
     String codigoIATA;
 
-    @Size(max = 50)
+    @Size(max = 80)
     @Column(name = "cidade", length = 50)
     @NotNull
     String cidade;

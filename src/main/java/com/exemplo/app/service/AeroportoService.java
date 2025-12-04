@@ -4,7 +4,7 @@ import com.exemplo.app.dto.AeroportoRequestDTO;
 import com.exemplo.app.dto.AeroportoResponseDTO;
 import com.exemplo.app.dto.AllAeroportoDTO;
 import com.exemplo.app.model.Aeroporto;
-import com.exemplo.app.repositiory.AeroportoRepository;
+import com.exemplo.app.repository.AeroportoRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -52,7 +52,7 @@ public class AeroportoService {
         if (aeroporto.isPresent())
             throw new RuntimeException("Aeroporto já existe no banco de dados com IATA: " + dto.codigoIATA());
 
-        Aeroporto novoAeroporto = settarAtributosAeroporto(aeroporto.get(), dto);
+        Aeroporto novoAeroporto = settarAtributosAeroporto(new Aeroporto(), dto);
 
         aeroportoRepository.save(novoAeroporto);
 

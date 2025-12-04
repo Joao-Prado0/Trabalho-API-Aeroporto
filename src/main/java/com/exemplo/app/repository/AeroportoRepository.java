@@ -1,4 +1,4 @@
-package com.exemplo.app.repositiory;
+package com.exemplo.app.repository;
 
 import com.exemplo.app.model.Aeroporto;
 import org.springframework.data.jpa.repository.JpaRepository;
