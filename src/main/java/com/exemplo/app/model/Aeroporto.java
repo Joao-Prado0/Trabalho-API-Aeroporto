@@ -38,7 +38,7 @@ public class Aeroporto {
     @NotNull
     String codigoIATA;
 
-    @Size(max = 80)
+    @Size(max = 100)
     @Column(name = "cidade", length = 50)
     @NotNull
     String cidade;
@@ -48,15 +48,15 @@ public class Aeroporto {
     @NotNull
     String codigoISO;
 
-    @Column(name = "latitude")
+    @Column(name = "latitude", precision = 10, scale = 6)
     @NotNull
     BigDecimal latitude;
 
-    @Column(name = "longitude")
+    @Column(name = "longitude", precision = 10, scale = 6)
     @NotNull
     BigDecimal longitude;
 
-    @Column(name = "altitude")
+    @Column(name = "altitude", precision = 10, scale = 2)
     @NotNull
     BigDecimal altitude;
 }
