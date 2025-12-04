@@ -1,5 +1,6 @@
 package com.exemplo.app.service;
 
+import com.exemplo.app.dto.AeroportoRegisterDTO;
 import com.exemplo.app.dto.AeroportoResponseDTO;
 import com.exemplo.app.dto.AllAeroportoDTO;
 import com.exemplo.app.model.Aeroporto;
@@ -42,6 +43,29 @@ public class AeroportoService {
 
         return settarResponseDTO(aeroporto.get());
     }
+
+    @Transactional
+    public void registrarNovoAeroporto(AeroportoRegisterDTO dto){
+
+        Optional<Aeroporto> aeroporto = aeroportoRepository.findByCodigoIATA(dto.codigoIATA());
+
+        if (aeroporto.isPresent())
+            throw new RuntimeException("Aeroporto já existe no banco de dados com IATA: " + dto.codigoIATA());
+
+        Aeroporto novoAeroporto = new Aeroporto();
+
+        novoAeroporto.setNomeAeroporto(dto.nomeAeroporto());
+        novoAeroporto.setCodigoIATA(dto.codigoIATA());
+        novoAeroporto.setCidade(dto.cidade());
+        novoAeroporto.setCodigoISO(dto.codigoISO());
+        novoAeroporto.setLatitude(dto.latitude());
+        novoAeroporto.setLongitude(dto.longitude());
+        novoAeroporto.setAltitude(dto.altitude());
+
+        aeroportoRepository.save(novoAeroporto);
+    }
+
+    // ----------------------------- Métodos utilitários -------------------------------------
 
     private AeroportoResponseDTO settarResponseDTO(Aeroporto aeroporto){
         return new AeroportoResponseDTO(
