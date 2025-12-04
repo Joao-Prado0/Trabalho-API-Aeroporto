@@ -5,7 +5,9 @@ import com.exemplo.app.dto.AeroportoResponseDTO;
 import com.exemplo.app.dto.AllAeroportoDTO;
 import com.exemplo.app.service.AeroportoService;
 import lombok.AllArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -55,7 +57,18 @@ public class AeroportoController {
     @PutMapping("{iata}")
     public ResponseEntity<?> alterarDadosDeAeroporto(@PathVariable String iata, @RequestBody AeroportoRequestDTO dto){
         try {
+            aeroportoService.alterarDadosAeroporto(iata,dto);
+            return ResponseEntity.ok("Aeroporto alterado com sucesso");
+        } catch (RuntimeException e){
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
 
+    @DeleteMapping("{iata}")
+    public ResponseEntity<?> deletarAeroporto(@PathVariable String iata){
+        try {
+            aeroportoService.deletarAeroporto(iata);
+            return new ResponseEntity<>(HttpStatus.GONE);
         } catch (RuntimeException e){
             return ResponseEntity.badRequest().body(e.getMessage());
         }

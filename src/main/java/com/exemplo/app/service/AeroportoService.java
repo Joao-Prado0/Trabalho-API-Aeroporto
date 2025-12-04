@@ -72,6 +72,16 @@ public class AeroportoService {
 
     }
 
+    @Transactional
+    public void deletarAeroporto(String iata){
+        Optional<Aeroporto> aeroporto = aeroportoRepository.findByCodigoIATA(iata);
+
+        if (aeroporto.isEmpty())
+            throw new RuntimeException("Aeroporto não encontrado no BD com código IATA: " + iata);
+
+        aeroportoRepository.delete(aeroporto.get());
+    }
+
     // ----------------------------- Métodos utilitários -------------------------------------
 
     private Aeroporto settarAtributosAeroporto(Aeroporto aeroporto, AeroportoRequestDTO dto){
