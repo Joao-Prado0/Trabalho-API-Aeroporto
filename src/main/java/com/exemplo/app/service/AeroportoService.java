@@ -1,6 +1,6 @@
 package com.exemplo.app.service;
 
-import com.exemplo.app.dto.AeroportoRegisterDTO;
+import com.exemplo.app.dto.AeroportoRequestDTO;
 import com.exemplo.app.dto.AeroportoResponseDTO;
 import com.exemplo.app.dto.AllAeroportoDTO;
 import com.exemplo.app.model.Aeroporto;
@@ -45,27 +45,46 @@ public class AeroportoService {
     }
 
     @Transactional
-    public void registrarNovoAeroporto(AeroportoRegisterDTO dto){
+    public void registrarNovoAeroporto(AeroportoRequestDTO dto){
 
         Optional<Aeroporto> aeroporto = aeroportoRepository.findByCodigoIATA(dto.codigoIATA());
 
         if (aeroporto.isPresent())
             throw new RuntimeException("Aeroporto já existe no banco de dados com IATA: " + dto.codigoIATA());
 
-        Aeroporto novoAeroporto = new Aeroporto();
-
-        novoAeroporto.setNomeAeroporto(dto.nomeAeroporto());
-        novoAeroporto.setCodigoIATA(dto.codigoIATA());
-        novoAeroporto.setCidade(dto.cidade());
-        novoAeroporto.setCodigoISO(dto.codigoISO());
-        novoAeroporto.setLatitude(dto.latitude());
-        novoAeroporto.setLongitude(dto.longitude());
-        novoAeroporto.setAltitude(dto.altitude());
+        Aeroporto novoAeroporto = settarAtributosAeroporto(aeroporto.get(), dto);
 
         aeroportoRepository.save(novoAeroporto);
     }
 
+    @Transactional
+    public void alterarDadosAeroporto(String iata, AeroportoRequestDTO dto){
+
+        if (!iata.equals(dto.codigoIATA()))
+            throw new RuntimeException("IATA da url não corresponde ao IATA da requisição");
+
+        Optional<Aeroporto> aeroportoOPT = aeroportoRepository.findByCodigoIATA(iata);
+        if (aeroportoOPT.isEmpty())
+            throw new RuntimeException("Aeroporto não encontrado no BD com código IATA: " + iata);
+
+        Aeroporto aeroportoBD = settarAtributosAeroporto(aeroportoOPT.get(), dto);
+
+
+    }
+
     // ----------------------------- Métodos utilitários -------------------------------------
+
+    private Aeroporto settarAtributosAeroporto(Aeroporto aeroporto, AeroportoRequestDTO dto){
+        aeroporto.setNomeAeroporto(dto.nomeAeroporto());
+        aeroporto.setCodigoIATA(dto.codigoIATA());
+        aeroporto.setCidade(dto.cidade());
+        aeroporto.setCodigoISO(dto.codigoISO());
+        aeroporto.setLatitude(dto.latitude());
+        aeroporto.setLongitude(dto.longitude());
+        aeroporto.setAltitude(dto.altitude());
+
+        return aeroporto;
+    }
 
     private AeroportoResponseDTO settarResponseDTO(Aeroporto aeroporto){
         return new AeroportoResponseDTO(
