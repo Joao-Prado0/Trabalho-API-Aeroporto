@@ -48,7 +48,7 @@ public class AeroportoController {
     public ResponseEntity<?> registrarNovoAeroporto(@RequestBody AeroportoRequestDTO dto){
         try {
             AeroportoResponseDTO responseDTO = aeroportoService.registrarNovoAeroporto(dto);
-            return ResponseEntity.ok(responseDTO);
+            return ResponseEntity.status(HttpStatus.CREATED).body(responseDTO);
         } catch (RuntimeException e){
             return ResponseEntity.badRequest().body(e.getMessage());
         }
@@ -68,7 +68,7 @@ public class AeroportoController {
     public ResponseEntity<?> deletarAeroporto(@PathVariable String iata){
         try {
             aeroportoService.deletarAeroporto(iata);
-            return new ResponseEntity<>(HttpStatus.GONE);
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         } catch (RuntimeException e){
             return ResponseEntity.badRequest().body(e.getMessage());
         }
