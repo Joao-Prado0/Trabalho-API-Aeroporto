@@ -35,11 +35,11 @@ public class AeroportoService {
     }
 
     @Transactional
-    public AeroportoResponseDTO buscarAeroportoPorID(Integer id){
-        Optional<Aeroporto> aeroporto = aeroportoRepository.findById(id);
+    public AeroportoResponseDTO buscarAeroportoPorIATA(String IATA){
+        Optional<Aeroporto> aeroporto = aeroportoRepository.findByCodigoIATA(IATA);
 
         if (aeroporto.isEmpty())
-            throw new RuntimeException("Nenhum aeroporto encotrado com id: " + id);
+            throw new RuntimeException("Nenhum aeroporto encotrado com IATA: " + IATA);
 
         return settarResponseDTO(aeroporto.get());
     }

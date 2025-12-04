@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -29,10 +30,10 @@ public class AeroportoController {
         }
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<?> buscarAeroportoPorID(@PathVariable Integer id){
+    @GetMapping("/{iata}")
+    public ResponseEntity<?> buscarAeroportoPorIATA(@PathVariable String iata){
         try {
-            AeroportoResponseDTO dto = aeroportoService.buscarAeroportoPorID(id);
+            AeroportoResponseDTO dto = aeroportoService.buscarAeroportoPorIATA(iata);
             return ResponseEntity.ok(dto);
         } catch (RuntimeException e){
             return ResponseEntity.badRequest().body(e.getMessage());
@@ -48,7 +49,6 @@ public class AeroportoController {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
-
 
 
 }
