@@ -50,13 +50,13 @@ public class Aeroporto {
 
     @Column(name = "latitude", precision = 10, scale = 6)
     @NotNull
-    BigDecimal latitude;
+    Double latitude;
 
     @Column(name = "longitude", precision = 10, scale = 6)
     @NotNull
-    BigDecimal longitude;
+    Double longitude;
 
     @Column(name = "altitude", precision = 10, scale = 2)
     @NotNull
-    BigDecimal altitude;
+    Double altitude;
 }

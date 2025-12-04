@@ -77,9 +77,9 @@ public class CargaDadosAeroportos implements CommandLineRunner {
                     aeroporto.setCodigoIATA(iata);
 
                     // Convertendo String para BigDecimal
-                    aeroporto.setLatitude(parseBigDecimal(latStr));
-                    aeroporto.setLongitude(parseBigDecimal(lonStr));
-                    aeroporto.setAltitude(parseBigDecimal(altStr));
+                    aeroporto.setLatitude(Double.parseDouble(latStr));
+                    aeroporto.setLongitude(Double.parseDouble(lonStr));
+                    aeroporto.setAltitude(Double.parseDouble(altStr));
 
                     aeroportoRepository.save(aeroporto);
                     salvos++;
@@ -93,15 +93,4 @@ public class CargaDadosAeroportos implements CommandLineRunner {
         }
     }
 
-    private BigDecimal parseBigDecimal(String value) {
-        try {
-            if (value == null || value.trim().isEmpty()) {
-                return BigDecimal.ZERO;
-            }
-            return new BigDecimal(value.trim());
-        } catch (Exception e) {
-            // Se falhar a conversão, retorna 0 para não quebrar a linha toda
-            return BigDecimal.ZERO;
-        }
-    }
 }

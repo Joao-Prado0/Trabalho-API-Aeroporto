@@ -8,8 +8,8 @@ public record AeroportoResponseDTO(
         String codigoIATA,
         String cidade,
         String codigoISO,
-        BigDecimal latitude,
-        BigDecimal longitude,
-        BigDecimal altitude
+        Double latitude,
+        Double longitude,
+        Double altitude
 ) {
 }

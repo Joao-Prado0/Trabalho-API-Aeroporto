@@ -1,14 +1,14 @@
 package com.exemplo.app.dto;
 
-import java.math.BigDecimal;
+import jakarta.validation.constraints.NotNull;
 
 public record AeroportoRequestDTO(
-        String nomeAeroporto,
-        String codigoIATA,
-        String cidade,
-        String codigoISO,
-        BigDecimal latitude,
-        BigDecimal longitude,
-        BigDecimal altitude
+        @NotNull String nomeAeroporto,
+        @NotNull String codigoIATA,
+        @NotNull String cidade,
+        @NotNull String codigoISO,
+        @NotNull Double latitude,
+        @NotNull Double longitude,
+        @NotNull Double altitude
 ) {
 }
