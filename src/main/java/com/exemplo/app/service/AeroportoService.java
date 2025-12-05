@@ -40,7 +40,7 @@ public class AeroportoService {
         Optional<Aeroporto> aeroporto = aeroportoRepository.findByCodigoIATA(IATA);
 
         if (aeroporto.isEmpty())
-            throw new RuntimeException("Nenhum aeroporto encotrado com IATA: " + IATA);
+            throw new AeroportoNaoEncontradoException("Nenhum aeroporto encotrado com IATA: " + IATA);
 
         return settarResponseDTO(aeroporto.get());
     }
@@ -92,8 +92,14 @@ public class AeroportoService {
     private Aeroporto settarAtributosAeroporto(Aeroporto aeroporto, AeroportoRequestDTO dto){
         aeroporto.setNomeAeroporto(dto.nomeAeroporto());
         aeroporto.setCidade(dto.cidade());
-        aeroporto.setLatitude(dto.latitude());
+
+        if (dto.longitude()<-180 || dto.longitude()>180)
+            throw new IllegalArgumentException("Longitude inválida");
         aeroporto.setLongitude(dto.longitude());
+
+        if (dto.latitude()<-90.0 || dto.latitude()>90.0)
+            throw new IllegalArgumentException("Latitude inválida");
+        aeroporto.setLatitude(dto.latitude());
 
         if (dto.codigoIATA().length() > 3)
             throw new IllegalArgumentException("Código IATA inválido");
@@ -103,7 +109,7 @@ public class AeroportoService {
             throw new IllegalArgumentException("Código ISO inválido");
         aeroporto.setCodigoISO(dto.codigoISO());
 
-        if (dto.altitude() < 0.0)
+        if (dto.altitude() < -378.0)
             throw new IllegalArgumentException("Altitude Inválida");
         aeroporto.setAltitude(dto.altitude());
 
