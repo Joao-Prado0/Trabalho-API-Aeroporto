@@ -48,15 +48,20 @@ public class Aeroporto {
     @NotNull
     String codigoISO;
 
-    @Column(name = "latitude", precision = 10, scale = 6)
+    @Column(name = "latitude")
     @NotNull
     Double latitude;
 
-    @Column(name = "longitude", precision = 10, scale = 6)
+    @Column(name = "longitude")
     @NotNull
     Double longitude;
 
-    @Column(name = "altitude", precision = 10, scale = 2)
+    @Column(name = "altitude")
     @NotNull
     Double altitude;
+
+    public static Double converterPesParaMetros(Double pes){
+        if (pes == null) return null;
+        return pes * 0.3048;
+    }
 }

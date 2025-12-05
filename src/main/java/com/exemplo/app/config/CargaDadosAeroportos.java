@@ -2,6 +2,7 @@ package com.exemplo.app.config;
 
 import com.exemplo.app.model.Aeroporto;
 import com.exemplo.app.repository.AeroportoRepository;
+import com.exemplo.app.service.AeroportoService;
 import com.exemplo.app.utils.CountryUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -79,7 +80,9 @@ public class CargaDadosAeroportos implements CommandLineRunner {
                     // Convertendo String para BigDecimal
                     aeroporto.setLatitude(Double.parseDouble(latStr));
                     aeroporto.setLongitude(Double.parseDouble(lonStr));
-                    aeroporto.setAltitude(Double.parseDouble(altStr));
+
+                    Double altitude = aeroporto.converterPesParaMetros(Double.parseDouble(altStr));
+                    aeroporto.setAltitude(altitude);
 
                     aeroportoRepository.save(aeroporto);
                     salvos++;

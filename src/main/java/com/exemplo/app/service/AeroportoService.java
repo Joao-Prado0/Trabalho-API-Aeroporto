@@ -109,9 +109,10 @@ public class AeroportoService {
             throw new IllegalArgumentException("Código ISO inválido");
         aeroporto.setCodigoISO(dto.codigoISO());
 
-        if (dto.altitude() < -378.0)
+        Double altitude = aeroporto.converterPesParaMetros(dto.altitude());
+        if (altitude < -378.0)
             throw new IllegalArgumentException("Altitude Inválida");
-        aeroporto.setAltitude(dto.altitude());
+        aeroporto.setAltitude(altitude);
 
         return aeroporto;
     }
