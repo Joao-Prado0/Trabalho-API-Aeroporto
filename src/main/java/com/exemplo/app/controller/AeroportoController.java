@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("api/v1/aeroporto")
+@RequestMapping("api/v1/aeroportos")
 @AllArgsConstructor
 public class AeroportoController {
 
