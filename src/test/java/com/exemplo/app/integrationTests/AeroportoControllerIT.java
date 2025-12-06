@@ -123,6 +123,22 @@ public class AeroportoControllerIT {
         assertEquals(0,aeroportoRepository.count());
     }
 
+    @Test
+    @DisplayName("Buscar aeroporto após delete")
+    void buscarAeroporto_AposDelete_Retorna404() throws Exception{
+        Aeroporto aeroporto = criarAeroportoExemplo();
+        aeroportoRepository.save(aeroporto);
+
+        mockMvc.perform(delete("/api/v1/aeroportos/CNF")
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNoContent());
+
+        mockMvc.perform(get("/api/v1/aeroportos/CNF")
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNotFound());
+    }
+
+
     private Aeroporto criarAeroportoExemplo(){
         Aeroporto aeroporto = new Aeroporto();
         aeroporto.setNomeAeroporto("Aeroporto de Confins");

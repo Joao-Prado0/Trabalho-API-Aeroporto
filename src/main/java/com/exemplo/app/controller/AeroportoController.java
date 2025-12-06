@@ -3,6 +3,7 @@ package com.exemplo.app.controller;
 import com.exemplo.app.dto.AeroportoRequestDTO;
 import com.exemplo.app.dto.AeroportoResponseDTO;
 import com.exemplo.app.dto.AllAeroportoDTO;
+import com.exemplo.app.exceptions.AeroportoNaoEncontradoException;
 import com.exemplo.app.service.AeroportoService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -39,6 +40,8 @@ public class AeroportoController {
         try {
             AeroportoResponseDTO dto = aeroportoService.buscarAeroportoPorIATA(iata);
             return ResponseEntity.ok(dto);
+        } catch (AeroportoNaoEncontradoException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         } catch (RuntimeException e){
             return ResponseEntity.badRequest().body(e.getMessage());
         }
@@ -59,6 +62,8 @@ public class AeroportoController {
         try {
             AeroportoResponseDTO responseDTO = aeroportoService.alterarDadosAeroporto(iata,dto);
             return ResponseEntity.ok(responseDTO);
+        } catch (AeroportoNaoEncontradoException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         } catch (RuntimeException e){
             return ResponseEntity.badRequest().body(e.getMessage());
         }
@@ -69,6 +74,8 @@ public class AeroportoController {
         try {
             aeroportoService.deletarAeroporto(iata);
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        } catch (AeroportoNaoEncontradoException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         } catch (RuntimeException e){
             return ResponseEntity.badRequest().body(e.getMessage());
         }
