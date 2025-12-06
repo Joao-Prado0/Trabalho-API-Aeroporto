@@ -15,6 +15,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import tools.jackson.databind.ObjectMapper;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
@@ -108,6 +109,19 @@ public class AeroportoControllerIT {
         assertEquals("Aeroporto Internacional Tancredo Neves", aeroportoRepository.findAll().getFirst().getNomeAeroporto());
     }
 
+    @Test
+    @DisplayName("Deletar aeroporto pelo código IATA com sucesso.")
+    void deletarAeroporto_ComSucesso() throws Exception{
+        Aeroporto aeroporto = criarAeroportoExemplo();
+        aeroportoRepository.save(aeroporto);
+
+        mockMvc.perform(delete("/api/v1/aeroportos/CNF")
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNoContent());
+
+
+        assertEquals(0,aeroportoRepository.count());
+    }
 
     private Aeroporto criarAeroportoExemplo(){
         Aeroporto aeroporto = new Aeroporto();
