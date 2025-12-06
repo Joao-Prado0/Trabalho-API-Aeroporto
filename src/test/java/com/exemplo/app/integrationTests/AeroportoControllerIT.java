@@ -17,6 +17,7 @@ import tools.jackson.databind.ObjectMapper;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -68,14 +69,7 @@ public class AeroportoControllerIT {
     @DisplayName("Integração: Deve retornar corretamente um aeroporto buscado pelo seu código IATA")
     void buscarAeroporto_ComSucesso() throws Exception {
 
-        Aeroporto aeroporto = new Aeroporto();
-        aeroporto.setNomeAeroporto("Aeroporto de Confins");
-        aeroporto.setCodigoIATA("CNF");
-        aeroporto.setCidade("Belo Horizonte");
-        aeroporto.setCodigoISO("BR");
-        aeroporto.setLatitude(-19.6244);
-        aeroporto.setLongitude(-43.9719);
-        aeroporto.setAltitude(827.0);
+        Aeroporto aeroporto = criarAeroportoExemplo();
 
         aeroportoRepository.save(aeroporto);
 
@@ -85,5 +79,45 @@ public class AeroportoControllerIT {
                         .andExpect(jsonPath("$.codigoIATA").value("CNF"))
                         .andExpect(jsonPath("$.nomeAeroporto").value("Aeroporto de Confins"))
                         .andExpect(jsonPath("$.cidade").value("Belo Horizonte"));
+    }
+
+    @Test
+    @DisplayName("Integração: ")
+    void alterarAeroporto_ComSucesso() throws Exception {
+        Aeroporto aeroporto = criarAeroportoExemplo();
+        aeroportoRepository.save(aeroporto);
+
+        AeroportoRequestDTO dto =  new AeroportoRequestDTO(
+                "Aeroporto Internacional Tancredo Neves",
+                "CNF",
+                "Belo Horizonte",
+                "BR",
+                -19.6244,
+                -43.9719,
+                800.0
+        );
+
+        mockMvc.perform(put("/api/v1/aeroportos/CNF")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(dto)))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.nomeAeroporto").value("Aeroporto Internacional Tancredo Neves"));
+
+
+        assertEquals(1, aeroportoRepository.count());
+        assertEquals("Aeroporto Internacional Tancredo Neves", aeroportoRepository.findAll().getFirst().getNomeAeroporto());
+    }
+
+
+    private Aeroporto criarAeroportoExemplo(){
+        Aeroporto aeroporto = new Aeroporto();
+        aeroporto.setNomeAeroporto("Aeroporto de Confins");
+        aeroporto.setCodigoIATA("CNF");
+        aeroporto.setCidade("Belo Horizonte");
+        aeroporto.setCodigoISO("BR");
+        aeroporto.setLatitude(-19.6244);
+        aeroporto.setLongitude(-43.9719);
+        aeroporto.setAltitude(827.0);
+        return aeroporto;
     }
 }
